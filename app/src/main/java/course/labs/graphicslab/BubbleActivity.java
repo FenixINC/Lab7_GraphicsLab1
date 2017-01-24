@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.TouchDelegate;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -97,7 +98,7 @@ public class BubbleActivity extends Activity {
 
 
 		// TODO+ load the sound from res/raw/bubble_pop.wav
-		mSoundID = mSoundPool.load(this, R.raw.bubble_pop, 4);
+		mSoundID = mSoundPool.load(this, R.raw.bubble_pop, 3);
 	}
 
 	@Override
@@ -149,11 +150,11 @@ public class BubbleActivity extends Activity {
 
 				event.getAction();
 				mFrame.getChildCount();
-				BubbleView b = new BubbleView(BubbleActivity.this, 10, 10);
+				BubbleView b = new BubbleView(BubbleActivity.this, mDisplayWidth, mDisplayHeight);
 				mFrame.addView(b);
 
 
-				return true;
+				return false;
 			}
 		});
 	}
@@ -263,8 +264,8 @@ public class BubbleActivity extends Activity {
 					// TODO+ Set movement direction and speed
 					// Limit movement speed in the x and y
 					// direction to [-3..3] pixels per movement.
-					mDx = 1;
-					mDy = 1;
+					mDx = 3;
+					mDy = 3;
 
 			}
 		}
@@ -281,7 +282,7 @@ public class BubbleActivity extends Activity {
 			}
 
 			// TODO+ create the scaled bitmap using size set above
-			mScaledBitmap = null;
+			mScaledBitmap.createScaledBitmap(mBitmap, mScaledBitmapWidth, mDisplayHeight, true);
 		}
 
 		// Start moving the BubbleView & updating the display
@@ -313,7 +314,9 @@ public class BubbleActivity extends Activity {
 
 			// TODO - Return true if the BubbleView intersects position (x,y)
 
-
+// 			if(intersects(x, y)){
+//				return true;
+//			}
 			return false;
 		}
 
@@ -348,7 +351,7 @@ public class BubbleActivity extends Activity {
 		// Change the Bubble's speed and direction
 		private synchronized void deflect(float velocityX, float velocityY) {
 
-			//TODO - set mDx and mDy to be the new velocities divided by the REFRESH_RATE
+			//TODO+ set mDx and mDy to be the new velocities divided by the REFRESH_RATE
 			mDx = velocityX;
 			mDy = velocityY;
 
@@ -370,7 +373,7 @@ public class BubbleActivity extends Activity {
 			canvas.rotate(mDRotate);
 
 			// TODO+ draw the bitmap at its new location
-			canvas.drawBitmap(mBitmap, 550, 700, null);
+			canvas.drawBitmap(mBitmap, mXPos, mYPos, mPainter);
 
 			// TODO+ restore the canvas
 			canvas.restore();
